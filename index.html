@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xypher Design | Tasarımın Merkezi</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: linear-gradient(180deg, #02041a 0%, #000c66 100%);
+            color: white;
+            font-family: 'sans-serif', Arial;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Sayfa Geçişleri */
+        #main-page, #designs-page, #team-page, #support-page {
+            transition: 0.5s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* HEADER & MENU */
+        header {
+            background-color: #03041F;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo-box { 
+            display: flex; 
+            align-items: center; 
+            cursor: pointer; 
+            user-select: none;
+        }
+        
+        .logo-icon { width: 45px; height: 45px; margin-right: 12px; }
+        .logo-title { font-size: 20px; font-weight: 800; letter-spacing: 2px; display: block; }
+        .logo-subtitle { font-size: 14px; color: #ccc; letter-spacing: 3px; }
+
+        .menu-toggle {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            z-index: 101;
+        }
+
+        .menu-icon-img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100vh;
+            background-color: #03041F;
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            z-index: 200;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: right 0.4s ease-in-out;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+        }
+
+        .sidebar.active {
+            right: 0;
+        }
+
+        .close-menu {
+            align-self: flex-end;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 40px;
+            line-height: 1;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .menu-btn {
+            background-color: rgba(108, 92, 231, 0.1);
+            border: 2px solid #6c5ce7;
+            color: white;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .menu-btn:hover {
+            background-color: #6c5ce7;
+            box-shadow: 0 0 15px #6c5ce7;
+            transform: translateY(-2px);
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 199;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.4s, visibility 0.4s;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* HERO & GENEL STİLLER */
+        .hero {
+            height: 85vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+            box-shadow: inset 0 -100px 100px -50px #02041a;
+        }
+
+        .hero h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 0 15px rgba(0, 212, 255, 0.3); }
+        .hero p { font-size: 1.1rem; color: #a0a0ff; margin-bottom: 30px; }
+
+        .btn-group { display: flex; flex-direction: column; gap: 15px; align-items: center; }
+
+        .btn {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 2px solid #00d4ff;
+            color: white;
+            padding: 12px 25px;
+            border-radius: 15px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            display: flex; align-items: center; gap: 12px;
+            min-width: 220px;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .btn:active { transform: scale(0.92); filter: brightness(1.2); }
+        .btn-discord { border-color: #5865F2; background-color: rgba(88, 101, 242, 0.1); }
+        .btn-discord:hover { background-color: #5865F2; box-shadow: 0 0 25px rgba(88, 101, 242, 0.6); transform: translateY(-3px); }
+        .btn:not(.btn-discord):hover { background-color: #00d4ff; box-shadow: 0 0 20px #00d4ff; color: #000; transform: translateY(-3px); }
+
+        /* KARTLAR & BÖLÜMLER */
+        .section-wrapper { padding: 60px 20px; text-align: center; background-color: #02041a; }
+        .section-tag { color: #6c5ce7; font-weight: bold; font-size: 13px; text-transform: uppercase; margin-bottom: 10px; display: block; }
+        .section-title { font-size: 28px; margin-bottom: 15px; color: white; }
+        .section-title span { color: #6c5ce7; }
+        .section-desc { color: #a0a0ff; max-width: 600px; margin: 0 auto 40px auto; line-height: 1.6; font-size: 15px; }
+
+        .card-container { display: flex; flex-direction: column; gap: 25px; max-width: 450px; margin: 0 auto; }
+
+        .card {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex; flex-direction: column; align-items: center;
+            transition: 0.6s all ease-out;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .card.reveal { opacity: 1; transform: translateY(0); }
+        .card:hover { transform: translateY(-5px); border-color: #00d4ff; }
+
+        .card-icon-box { background: rgba(0, 212, 255, 0.1); width: 70px; height: 70px; border-radius: 15px; display: flex; justify-content: center; align-items: center; margin-bottom: 20px; }
+        .card-icon-img { width: 45px; height: 45px; object-fit: contain; }
+
+        .card h3 { margin-bottom: 15px; font-size: 20px; color: white; }
+        .service-list { list-style: none; width: 100%; margin-bottom: 20px; text-align: left; }
+        .service-list li { font-size: 14px; color: #ccc; margin-bottom: 8px; display: flex; align-items: center; }
+        .service-list li::before { content: '✓'; color: #00d4ff; margin-right: 10px; font-weight: bold; }
+
+        .populer-tag { position: absolute; top: 15px; right: 15px; background: #f1c40f; color: #000; padding: 3px 10px; border-radius: 8px; font-size: 11px; font-weight: bold; }
+        
+        .card-action-btn { background: #5468ff; color: white; text-decoration: none; width: 100%; padding: 12px; border-radius: 12px; font-weight: bold; font-size: 14px; text-align: center; cursor: pointer; border: none; transition: 0.2s; }
+        .card-action-btn:active { transform: scale(0.95); }
+
+        /* EKİBİMİZ SAYFASI ÖZEL */
+        .profile-img { width: 120px; height: 120px; border-radius: 50%; border: 3px solid #6c5ce7; margin-bottom: 15px; object-fit: cover; }
+        .member-name { font-size: 22px; font-weight: bold; color: white; margin-bottom: 8px; }
+        .member-desc { color: #b0b0b0; font-size: 14px; line-height: 1.5; }
+
+        /* DESTEK SAYFASI ÖZEL */
+        .support-card { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 25px; padding: 20px; max-width: 450px; margin: 0 auto; text-align: center; }
+        .support-img { width: 100%; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); transition: 0.4s; }
+        .support-nav-btns { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .nav-arrow { background: #6c5ce7; border: none; color: white; padding: 10px 20px; border-radius: 10px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .nav-arrow:disabled { opacity: 0.3; cursor: not-allowed; }
+        .support-text { font-size: 14px; color: #ccc; line-height: 1.5; margin-top: 15px; min-height: 60px; }
+
+        /* TASARIMLAR SAYFASI STİLLERİ */
+        .designs-header { padding: 60px 20px; text-align: center; }
+        .designs-header h2 span { color: #6c5ce7; }
+        
+        .design-display-container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+            padding: 0 20px;
+            max-width: 450px;
+            margin: 0 auto;
+        }
+
+        .design-display-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+        }
+
+        .design-display-card:hover { border-color: #6c5ce7; }
+        .design-display-img { width: 100%; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        .design-display-name { font-size: 22px; font-weight: bold; }
+
+        .more-examples { padding: 40px 20px; text-align: center; }
+        .more-examples p { color: #b0b0b0; margin-bottom: 20px; font-size: 14px; }
+
+        .back-home-btn {
+            display: block;
+            width: fit-content;
+            margin: 20px auto 40px auto;
+            background: transparent;
+            border: 1px solid #a0a0ff;
+            color: #a0a0ff;
+            padding: 10px 25px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        /* --- BURADAN AŞAĞISI YENİ EKLENEN FOOTER STİLLERİ --- */
+        footer {
+            background-color: #02041a;
+            padding: 40px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: 50px;
+        }
+        .footer-logo { font-size: 24px; font-weight: 800; color: #6c5ce7; margin-bottom: 10px; display: block; }
+        .footer-desc { color: #888; font-size: 14px; margin-bottom: 30px; line-height: 1.6; }
+        .footer-section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: white; }
+        .footer-list { list-style: none; padding: 0; margin-bottom: 30px; }
+        .footer-list li { color: #888; font-size: 14px; margin-bottom: 8px; }
+        .footer-social { display: flex; gap: 15px; margin-bottom: 30px; }
+        .footer-social-btn { background: rgba(255, 255, 255, 0.05); width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; text-decoration: none; transition: 0.3s; }
+        .footer-social-btn:hover { background: #5865F2; }
+        .footer-bottom { border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 20px; color: #666; font-size: 12px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-box" onclick="showHome()">
+            <img src="https://r.resimlink.com/DFlEfHbZe1.png" alt="X" class="logo-icon">
+            <div class="logo-text">
+                <span class="logo-title">XYPHER</span>
+                <span class="logo-subtitle">DESIGN</span>
+            </div>
+        </div>
+        
+        <button class="menu-toggle" onclick="toggleSidebar()">
+            <img src="https://r.resimlink.com/UA20ftc.png" alt="Menü" class="menu-icon-img">
+        </button>
+    </header>
+
+    <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <button class="close-menu" onclick="toggleSidebar()">&times;</button>
+        <nav class="sidebar-nav">
+            <button class="menu-btn" onclick="goToDesignsPage()">
+                <img src="https://i.hizliresim.com/1qz61ne.png" alt="ikon" style="width:20px;"> Tasarımlar
+            </button>
+            <button class="menu-btn" onclick="goToTeamPage()">
+                <img src="https://i.hizliresim.com/30bgxe3.png" alt="ikon" style="width:20px;"> Ekibimiz
+            </button>
+            <button class="menu-btn" onclick="goToSupportPage()">
+                <img src="https://i.hizliresim.com/5m37e68.png" alt="ikon" style="width:20px;"> Destek
+            </button>
+            <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="menu-btn" style="border-color: #5865F2; background-color: rgba(88, 101, 242, 0.1);">
+                <img src="https://r.resimlink.com/9tbUKD-.png" alt="ikon" style="width:18px;"> Discord
+            </a>
+        </nav>
+    </div>
+
+    <div id="main-page">
+        <div class="hero">
+            <h1>Xypher Design'a Hoş Geldin</h1>
+            <p>Geleceğin tasarımları burada hayat buluyor.</p>
+            <div class="btn-group">
+                <a href="#hizmet-bolumu" class="btn">
+                    <img src="https://r.resimlink.com/h8P1TGfb3BN.png" alt="ikon" style="width:20px;">
+                    Hizmetlerimizi Gör
+                </a>
+                <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="btn btn-discord">
+                    <img src="https://r.resimlink.com/9tbUKD-.png" alt="ikon" style="width:20px;">
+                    Hemen Başla
+                </a>
+            </div>
+        </div>
+
+        <section class="section-wrapper">
+            <span class="section-tag">Neden Biz?</span>
+            <h2 class="section-title">Neden Xypher?</h2>
+            <p class="section-desc">Tasarım dünyasında sunduğumuz yenilikçi çözümlerle sizi geleceğe taşıyoruz.</p>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/bugSeC6hF.png" class="card-icon-img"></div>
+                    <h3>Şık Tasarımlar</h3>
+                    <p>Slot Tablolarınızı, Mvp, Result hepsini şık modern bir hale getiriyoruz.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/znLA15Dm.png" class="card-icon-img"></div>
+                    <h3>Güncel Projeler</h3>
+                    <p>Her daim en güncel tasarımlar ve modern projelerle hizmet vermeye devam ediyoruz.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/NIPx4ktST9.png" class="card-icon-img"></div>
+                    <h3>Çekilişler</h3>
+                    <p>Tasarım, Ekstra Bot, %lik indirimler ve daha fazlasını yapıyoruz.</p>
+                </div>
+                <div class="card">
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/EtAK4q9.png" class="card-icon-img"></div>
+                    <h3>7/24 Destek</h3>
+                    <p>Müşteri memnuniyeti için 7/24 ulaşabileceğiniz destek hizmetleri sunuyoruz.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="hizmet-bolumu" class="section-wrapper" style="padding-top: 0;">
+            <span class="section-tag" style="color: #6c5ce7;">HİZMETLERİMİZ</span>
+            <h2 class="section-title">Sizler İçin <span style="color: #6c5ce7;">En İyisi</span></h2>
+            <div class="card-container">
+                <div class="card">
+                    <span class="populer-tag">★ Popüler</span>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/tUXuNLp-.png" class="card-icon-img"></div>
+                    <h3>Result Table</h3>
+                    <ul class="service-list">
+                        <li>Modern Tasarım</li>
+                        <li>Şık Tasarımlar</li>
+                    </ul>
+                    <button onclick="showDesigns()" class="card-action-btn">Örnek Tasarımlar</button>
+                </div>
+
+                <div class="card">
+                    <span class="populer-tag">★ Popüler</span>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/1uBFI4cb2.png" class="card-icon-img"></div>
+                    <h3>Mvp Table</h3>
+                    <ul class="service-list">
+                        <li>Özeleştirile bilir mvp tasarım</li>
+                        <li>Şık Tasarımlar</li>
+                    </ul>
+                    <button onclick="showDesigns()" class="card-action-btn">Örnek Tasarımlar</button>
+                </div>
+
+                <div class="card">
+                    <span class="populer-tag">★ Popüler</span>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/VhKFUZC.png" class="card-icon-img"></div>
+                    <h3>Slot Lıst</h3>
+                    <ul class="service-list">
+                        <li>Gelişmiş Tasarım</li>
+                        <li>Özeleştirilebilir slotlar</li>
+                    </ul>
+                    <button onclick="showDesigns()" class="card-action-btn">Örnek Tasarımlar</button>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <span class="footer-logo">Xypher Design</span>
+            <p class="footer-desc">Discord sunucunuz için profesyonel tasarım ve hizmet çözümleri.</p>
+
+            <h3 class="footer-section-title">Hizmetler</h3>
+            <ul class="footer-list">
+                <li>Mvp tasarım</li>
+                <li>slot tasarım</li>
+                <li>livescore tasarım</li>
+                <li>result tasarım</li>
+                <li>vip tasarım</li>
+            </ul>
+
+            <h3 class="footer-section-title">Sosyal Medya</h3>
+            <div class="footer-social">
+                <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="footer-social-btn">
+                    <img src="https://r.resimlink.com/9tbUKD-.png" width="22">
+                </a>
+            </div>
+
+            <div class="footer-bottom">
+                © 2026 Xypher Design. tüm hakları saklıdır.
+            </div>
+        </footer>
+    </div>
+
+    <div id="designs-page" class="hidden">
+        <div class="designs-header">
+            <span class="section-tag" style="color: #6c5ce7;">TASARIMLARIMIZ</span>
+            <h2 class="section-title">Sizlere <span>Özgün</span></h2>
+        </div>
+
+        <div class="design-display-container">
+            <div class="design-display-card">
+                <img src="https://r.resimlink.com/Eb5U4lvxu.jpg" class="design-display-img">
+                <div class="design-display-name">Result Table</div>
+            </div>
+            <div class="design-display-card">
+                <img src="https://r.resimlink.com/cMR9AvHfJi.jpg" class="design-display-img">
+                <div class="design-display-name">Slot Lıst</div>
+            </div>
+            <div class="design-display-card">
+                <img src="https://r.resimlink.com/thpDWIi-l.jpg" class="design-display-img">
+                <div class="design-display-name">Mvp Table</div>
+            </div>
+        </div>
+
+        <div class="more-examples">
+            <p>Daha fazla örnek için aşağıdaki butona tıklayınız</p>
+            <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="btn btn-discord" style="margin: 0 auto;">
+                <img src="https://r.resimlink.com/9tbUKD-.png" alt="ikon" style="width:20px;">
+                Örnekler
+            </a>
+        </div>
+
+        <button onclick="showHome()" class="back-home-btn">← Ana Sayfaya Dön</button>
+        <div style="height: 50px;"></div>
+    </div>
+
+    <div id="team-page" class="hidden">
+        <div class="section-wrapper">
+            <span class="section-tag" style="color: #6c5ce7;">EKİBİMİZ</span>
+            <h2 class="section-title">Destek <span>Ekibimiz</span></h2>
+            
+            <div class="card-container">
+                <div class="card reveal" style="opacity: 1; transform: translateY(0); margin-bottom: 20px;">
+                    <img src="https://r.resimlink.com/yeqXZBPwDzx.png" alt="MusTR" class="profile-img">
+                    <div class="member-name">Xypher MusTR</div>
+                    <p class="member-desc">Must tasarım merkezimizin kurucusu</p>
+                </div>
+
+                <div class="card reveal" style="opacity: 1; transform: translateY(0);">
+                    <img src="https://r.resimlink.com/fgQb2Lw.png" alt="Zeros" class="profile-img">
+                    <div class="member-name">Xypher Zeros</div>
+                    <p class="member-desc">Zeros bizim hem destek hemde stajyer tasarımcımız</p>
+                </div>
+            </div>
+
+            <button onclick="showHome()" class="back-home-btn">← Ana Sayfaya Dön</button>
+            <div style="height: 50px;"></div>
+        </div>
+    </div>
+
+    <div id="support-page" class="hidden">
+        <div class="section-wrapper">
+            <span class="section-tag" style="color: #6c5ce7;">DESTEK</span>
+            <h2 class="section-title">Destekler İçin <span>Okuyun</span></h2>
+            
+            <div class="support-card">
+                <img id="support-img" src="https://i.hizliresim.com/6kwcgur.jpg" class="support-img">
+                <p id="support-text" class="support-text">Sunucumuzdaki Destek Kanalına dokunun</p>
+                
+                <div class="support-nav-btns">
+                    <button id="prevBtn" class="nav-arrow" onclick="changeStep(-1)">← Geri</button>
+                    <button id="nextBtn" class="nav-arrow" onclick="changeStep(1)">İleri →</button>
+                </div>
+            </div>
+
+            <button onclick="showHome()" class="back-home-btn">← Ana Sayfaya Dön</button>
+            <div style="height: 50px;"></div>
+        </div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+            document.getElementById('overlay').classList.toggle('active');
+            
+            if (document.getElementById('sidebar').classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        }
+
+        function goToDesignsPage() { toggleSidebar(); showDesigns(); }
+        function goToTeamPage() { toggleSidebar(); showTeam(); }
+        function goToSupportPage() { toggleSidebar(); showSupport(); }
+
+        function showDesigns() {
+            hideAllPages();
+            document.getElementById('designs-page').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showTeam() {
+            hideAllPages();
+            document.getElementById('team-page').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showSupport() {
+            hideAllPages();
+            document.getElementById('support-page').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function showHome() {
+            hideAllPages();
+            document.getElementById('main-page').classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+
+        function hideAllPages() {
+            document.getElementById('main-page').classList.add('hidden');
+            document.getElementById('designs-page').classList.add('hidden');
+            document.getElementById('team-page').classList.add('hidden');
+            document.getElementById('support-page').classList.add('hidden');
+        }
+
+        /* DESTEK ADIMLARI SCRIPT */
+        let currentStep = 0;
+        const steps = [
+            { img: "https://i.hizliresim.com/6kwcgur.jpg", text: "Sunucumuzdaki Destek Kanalına dokunun" },
+            { img: "https://i.hizliresim.com/m306fzr.jpg", text: "Sonrasında Destek aç Butonuna tıklayınız" },
+            { img: "https://i.hizliresim.com/8sypod2.jpg", text: "Destek Açma nedeninizi giriniz veya satın almak istediğiniz ürünün türünü giriniz (boş yere destek açmak ceza almanıza sebep olabilir)" }
+        ];
+
+        function changeStep(n) {
+            currentStep += n;
+            if (currentStep < 0) currentStep = 0;
+            if (currentStep >= steps.length) currentStep = steps.length - 1;
+
+            const imgEl = document.getElementById('support-img');
+            const textEl = document.getElementById('support-text');
+            
+            imgEl.style.opacity = 0;
+            setTimeout(() => {
+                imgEl.src = steps[currentStep].img;
+                textEl.innerText = steps[currentStep].text;
+                imgEl.style.opacity = 1;
+            }, 300);
+
+            document.getElementById('prevBtn').disabled = currentStep === 0;
+            document.getElementById('nextBtn').disabled = currentStep === steps.length - 1;
+        }
+
+        function reveal() {
+            var reveals = document.querySelectorAll(".card");
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - 100) reveals[i].classList.add("reveal");
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        reveal();
+        changeStep(0);
+    </script>
+</body>
+</html>
