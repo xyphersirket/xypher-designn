@@ -5,6 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xypher Design | Tasarımın Merkezi</title>
     <style>
+    /* YÜKLEME EKRANI STİLLERİ */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #02041a;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+.loader-logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 20px;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.loader-text {
+    color: white;
+    font-family: sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.8; }
+    50% { transform: scale(1.1); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.8; }
+}
+
+#loader.fade-out {
+    opacity: 0;
+    visibility: hidden;
+}
+
         * {
             margin: 0;
             padding: 0;
@@ -127,7 +168,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
         }
 
         .menu-btn:hover {
@@ -179,17 +220,23 @@
             border-radius: 15px;
             text-decoration: none;
             font-weight: bold;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             display: flex; align-items: center; gap: 12px;
             min-width: 220px;
             justify-content: center;
             cursor: pointer;
+            position: relative;
         }
 
-        .btn:active { transform: scale(0.92); filter: brightness(1.2); }
-        .btn-discord { border-color: #5865F2; background-color: rgba(88, 101, 242, 0.1); }
-        .btn-discord:hover { background-color: #5865F2; box-shadow: 0 0 25px rgba(88, 101, 242, 0.6); transform: translateY(-3px); }
-        .btn:not(.btn-discord):hover { background-color: #00d4ff; box-shadow: 0 0 20px #00d4ff; color: #000; transform: translateY(-3px); }
+        .btn:active {
+            transform: translateY(4px) scale(0.96);
+            box-shadow: inset 0 8px 15px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(0, 212, 255, 0.3);
+            filter: brightness(1.1);
+        }
+
+        .btn-discord:active {
+            box-shadow: inset 0 8px 15px rgba(0, 0, 0, 0.6), 0 4px 10px rgba(88, 101, 242, 0.4);
+        }
 
         /* KARTLAR & BÖLÜMLER */
         .section-wrapper { padding: 60px 20px; text-align: center; background-color: #02041a; }
@@ -284,7 +331,7 @@
             cursor: pointer;
         }
 
-        /* --- BURADAN AŞAĞISI YENİ EKLENEN FOOTER STİLLERİ --- */
+        /* FOOTER STİLLERİ */
         footer {
             background-color: #02041a;
             padding: 40px 20px;
@@ -303,6 +350,11 @@
     </style>
 </head>
 <body>
+  
+<div id="loader">
+    <img src="https://r.resimlink.com/DFlEfHbZe1.png" alt="Logo" class="loader-logo">
+    <div class="loader-text">Yükleniyor...</div>
+</div>
 
     <header>
         <div class="logo-box" onclick="showHome()">
@@ -324,16 +376,16 @@
         <button class="close-menu" onclick="toggleSidebar()">&times;</button>
         <nav class="sidebar-nav">
             <button class="menu-btn" onclick="goToDesignsPage()">
-                <img src="https://i.hizliresim.com/1qz61ne.png" alt="ikon" style="width:20px;"> Tasarımlar
+                <img src="https://r.resimlink.com/2WRM4axwy.png" alt="ikon" style="width:25px;"> Tasarımlar
             </button>
             <button class="menu-btn" onclick="goToTeamPage()">
-                <img src="https://i.hizliresim.com/30bgxe3.png" alt="ikon" style="width:20px;"> Ekibimiz
+                <img src="https://r.resimlink.com/6Giq7IUM.png" alt="ikon" style="width:25px;"> Ekibimiz
             </button>
             <button class="menu-btn" onclick="goToSupportPage()">
-                <img src="https://i.hizliresim.com/5m37e68.png" alt="ikon" style="width:20px;"> Destek
+                <img src="https://r.resimlink.com/4_ZDQVYmp.png" alt="ikon" style="width:25px;"> Destek
             </button>
             <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="menu-btn" style="border-color: #5865F2; background-color: rgba(88, 101, 242, 0.1);">
-                <img src="https://r.resimlink.com/9tbUKD-.png" alt="ikon" style="width:18px;"> Discord
+                <img src="https://r.resimlink.com/pbhjis3.png" alt="ikon" style="width:25px;"> Discord
             </a>
         </nav>
     </div>
@@ -344,11 +396,11 @@
             <p>Geleceğin tasarımları burada hayat buluyor.</p>
             <div class="btn-group">
                 <a href="#hizmet-bolumu" class="btn">
-                    <img src="https://r.resimlink.com/h8P1TGfb3BN.png" alt="ikon" style="width:20px;">
+                    <img src="https://r.resimlink.com/vtg983ip.png" alt="ikon" style="width:25px;">
                     Hizmetlerimizi Gör
                 </a>
                 <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="btn btn-discord">
-                    <img src="https://r.resimlink.com/9tbUKD-.png" alt="ikon" style="width:20px;">
+                    <img src="https://r.resimlink.com/1WHbV.png" alt="ikon" style="width:25px;">
                     Hemen Başla
                 </a>
             </div>
@@ -360,22 +412,22 @@
             <p class="section-desc">Tasarım dünyasında sunduğumuz yenilikçi çözümlerle sizi geleceğe taşıyoruz.</p>
             <div class="card-container">
                 <div class="card">
-                    <div class="card-icon-box"><img src="https://r.resimlink.com/bugSeC6hF.png" class="card-icon-img"></div>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/E3V2G1pizQ.png" class="card-icon-img"></div>
                     <h3>Şık Tasarımlar</h3>
                     <p>Slot Tablolarınızı, Mvp, Result hepsini şık modern bir hale getiriyoruz.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon-box"><img src="https://r.resimlink.com/znLA15Dm.png" class="card-icon-img"></div>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/qV5Bsm.png" class="card-icon-img"></div>
                     <h3>Güncel Projeler</h3>
                     <p>Her daim en güncel tasarımlar ve modern projelerle hizmet vermeye devam ediyoruz.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon-box"><img src="https://r.resimlink.com/NIPx4ktST9.png" class="card-icon-img"></div>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/uZ9thSMK3.png" class="card-icon-img"></div>
                     <h3>Çekilişler</h3>
                     <p>Tasarım, Ekstra Bot, %lik indirimler ve daha fazlasını yapıyoruz.</p>
                 </div>
                 <div class="card">
-                    <div class="card-icon-box"><img src="https://r.resimlink.com/EtAK4q9.png" class="card-icon-img"></div>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/2TJ9jIzrVExi.png" class="card-icon-img"></div>
                     <h3>7/24 Destek</h3>
                     <p>Müşteri memnuniyeti için 7/24 ulaşabileceğiniz destek hizmetleri sunuyoruz.</p>
                 </div>
@@ -388,7 +440,7 @@
             <div class="card-container">
                 <div class="card">
                     <span class="populer-tag">★ Popüler</span>
-                    <div class="card-icon-box"><img src="https://r.resimlink.com/tUXuNLp-.png" class="card-icon-img"></div>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/4sofy.png" class="card-icon-img"></div>
                     <h3>Result Table</h3>
                     <ul class="service-list">
                         <li>Modern Tasarım</li>
@@ -410,11 +462,22 @@
 
                 <div class="card">
                     <span class="populer-tag">★ Popüler</span>
-                    <div class="card-icon-box"><img src="https://r.resimlink.com/VhKFUZC.png" class="card-icon-img"></div>
+                    <div class="card-icon-box"><img src="https://r.resimlink.com/lQ-a3.png" class="card-icon-img"></div>
                     <h3>Slot Lıst</h3>
                     <ul class="service-list">
                         <li>Gelişmiş Tasarım</li>
                         <li>Özeleştirilebilir slotlar</li>
+                    </ul>
+                    <button onclick="showDesigns()" class="card-action-btn">Örnek Tasarımlar</button>
+                </div>
+
+                <div class="card">
+                    <span class="populer-tag">★ Popüler</span>
+                    <div class="card-icon-box"><img src="https://i.hizliresim.com/cpm4u8w.png" class="card-icon-img"></div>
+                    <h3>Vip Tablo</h3>
+                    <ul class="service-list">
+                        <li>Gelişmiş Tasarım</li>
+                        <li>Özeleştirilebilir Fiyatlar</li>
                     </ul>
                     <button onclick="showDesigns()" class="card-action-btn">Örnek Tasarımlar</button>
                 </div>
@@ -436,7 +499,7 @@
 
             <h3 class="footer-section-title">Sosyal Medya</h3>
             <div class="footer-social">
-                <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="footer-social-btn">
+                                <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="footer-social-btn">
                     <img src="https://r.resimlink.com/9tbUKD-.png" width="22">
                 </a>
             </div>
@@ -466,6 +529,10 @@
                 <img src="https://r.resimlink.com/thpDWIi-l.jpg" class="design-display-img">
                 <div class="design-display-name">Mvp Table</div>
             </div>
+            <div class="design-display-card">
+                <img src="https://i.hizliresim.com/7bdiuiw.jpg" class="design-display-img">
+                <div class="design-display-name">Vip Tablo</div>
+            </div>
         </div>
 
         <div class="more-examples">
@@ -492,10 +559,16 @@
                     <p class="member-desc">Must tasarım merkezimizin kurucusu</p>
                 </div>
 
-                <div class="card reveal" style="opacity: 1; transform: translateY(0);">
+                <div class="card reveal" style="opacity: 1; transform: translateY(0); margin-bottom: 20px;">
                     <img src="https://r.resimlink.com/fgQb2Lw.png" alt="Zeros" class="profile-img">
                     <div class="member-name">Xypher Zeros</div>
                     <p class="member-desc">Zeros bizim hem destek hemde stajyer tasarımcımız</p>
+                </div>
+
+                <div class="card reveal" style="opacity: 1; transform: translateY(0);">
+                    <img src="https://r.resimlink.com/zkFlpu.png" alt="Marso" class="profile-img">
+                    <div class="member-name">MARSO</div>
+                    <p class="member-desc">Marso bizim en büyük destekçimiz ve herşeyde payı vardır.</p>
                 </div>
             </div>
 
@@ -576,8 +649,20 @@
         const steps = [
             { img: "https://i.hizliresim.com/6kwcgur.jpg", text: "Sunucumuzdaki Destek Kanalına dokunun" },
             { img: "https://i.hizliresim.com/m306fzr.jpg", text: "Sonrasında Destek aç Butonuna tıklayınız" },
-            { img: "https://i.hizliresim.com/8sypod2.jpg", text: "Destek Açma nedeninizi giriniz veya satın almak istediğiniz ürünün türünü giriniz (boş yere destek açmak ceza almanıza sebep olabilir)" }
+            { img: "https://i.hizliresim.com/8sypod2.jpg", text: "Destek Açma nedeninizi giriniz veya satın almak istediğiniz ürünün türünü giriniz" }
         ];
+
+// Site yüklenince loader'ı kaldır
+window.addEventListener('load', function() {
+    const loader = document.getElementById('loader');
+    setTimeout(() => {
+        loader.classList.add('fade-out');
+        document.body.style.overflow = ''; // Kilidi aç
+    }, 1500); // 1.5 saniye ekranda kalır
+});
+
+// Sayfa açılırken kaydırmayı engelle
+document.body.style.overflow = 'hidden';
 
         function changeStep(n) {
             currentStep += n;
@@ -612,3 +697,4 @@
     </script>
 </body>
 </html>
+          
