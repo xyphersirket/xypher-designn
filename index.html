@@ -5,6 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xypher Design | Tasarımın Merkezi</title>
     <style>
+    /* PERFORMANS VE KORUMA EKLEMELERİ (GÖRÜNMEZ) */
+    html { scrollbar-gutter: stable; background-color: #02041a; }
+    body { background-attachment: fixed; }
+    img { 
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none; 
+        user-select: none; 
+        pointer-events: none; 
+    }
+    /* ------------------------------------------- */
+
     /* YÜKLEME EKRANI STİLLERİ */
 #loader {
     position: fixed;
@@ -352,8 +363,8 @@
 <body>
   
 <div id="loader">
-    <img src="https://r.resimlink.com/DFlEfHbZe1.png" alt="Logo" class="loader-logo">
-    <div class="loader-text">Yükleniyor...</div>
+    <img src="https://i.hizliresim.com/cg2yc1p.gif" alt="Logo" class="loader-logo">
+    <div class="loader-text">Yükleniyor..</div>
 </div>
 
     <header>
@@ -385,7 +396,7 @@
                 <img src="https://r.resimlink.com/4_ZDQVYmp.png" alt="ikon" style="width:25px;"> Destek
             </button>
             <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="menu-btn" style="border-color: #5865F2; background-color: rgba(88, 101, 242, 0.1);">
-                <img src="https://r.resimlink.com/pbhjis3.png" alt="ikon" style="width:25px;"> Discord
+                <img src="https://i.hizliresim.com/tgsn710.png" alt="ikon" style="width:25px;"> Discord
             </a>
         </nav>
     </div>
@@ -400,7 +411,7 @@
                     Hizmetlerimizi Gör
                 </a>
                 <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="btn btn-discord">
-                    <img src="https://r.resimlink.com/1WHbV.png" alt="ikon" style="width:25px;">
+                    <img src="https://i.hizliresim.com/tgsn710.png" alt="ikon" style="width:25px;">
                     Hemen Başla
                 </a>
             </div>
@@ -491,16 +502,16 @@
             <h3 class="footer-section-title">Hizmetler</h3>
             <ul class="footer-list">
                 <li>Mvp tasarım</li>
-                <li>slot tasarım</li>
-                <li>livescore tasarım</li>
-                <li>result tasarım</li>
-                <li>vip tasarım</li>
+                <li>Slot tasarım</li>
+                <li>Livescore tasarım</li>
+                <li>Result tasarım</li>
+                <li>Vip tasarım</li>
             </ul>
 
             <h3 class="footer-section-title">Sosyal Medya</h3>
             <div class="footer-social">
-                                <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="footer-social-btn">
-                    <img src="https://r.resimlink.com/9tbUKD-.png" width="22">
+                          <a href="https://discord.gg/AAkCqC3aNM" target="_blank" class="footer-social-btn">
+                    <img src="https://i.hizliresim.com/tgsn710.png" width="22">
                 </a>
             </div>
 
@@ -598,6 +609,14 @@
     </div>
 
     <script>
+        // KORUMA SCRIPTİ: Görsellere sağ tık ve sürüklemeyi engeller
+        document.addEventListener('contextmenu', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        }, false);
+        document.addEventListener('dragstart', function(e) {
+            if (e.target.tagName === 'IMG') e.preventDefault();
+        }, false);
+
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
             document.getElementById('overlay').classList.toggle('active');
@@ -697,4 +716,3 @@ document.body.style.overflow = 'hidden';
     </script>
 </body>
 </html>
-          
